@@ -16,10 +16,10 @@ print("STEP 1: Generate Synthetic Session Data")
 print("=" * 60)
 
 # Configuration: tune these for your machine's memory
-# Default: 50M rows for 16GB RAM machines
-NUM_ROWS = 50_000_000  # Adjust based on your RAM
-NUM_USERS = 50_000
-NUM_SESSIONS = 10_000_000
+# Default: 10M rows for 8GB RAM machines
+NUM_ROWS = 10_000_000  # Adjusted for 8GB RAM
+NUM_USERS = 25_000
+NUM_SESSIONS = 2_000_000
 
 np.random.seed(42)
 random.seed(42)
