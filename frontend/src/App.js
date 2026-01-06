@@ -6,6 +6,7 @@ import ServiceDetails from './components/ServiceDetails';
 import Login from './components/Login';
 import ClientProfile from './components/ClientProfile';
 import ConsultantDetails from './components/ConsultantDetails';
+import { AnalyticsDashboard } from './components/analytics';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/client-profile/:clientId" element={<ClientProfile />} />
         <Route path="/consultant-details/:consultantId" element={<ConsultantDetails />} />
+        <Route path="/analytics" element={<AnalyticsDashboard />} />
       </Routes>
     </Router>
   );
