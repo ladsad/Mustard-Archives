@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import './ClientProfile.css';
+import Header from './Header';
+
 function ClientProfile() {
   const [selectedSection, setSelectedSection] = useState('profile');
   const [profileData, setProfileData] = useState({
@@ -10,164 +12,211 @@ function ClientProfile() {
     home: '',
     city: ''
   });
-
-  const { clientId } = useParams();
-
-  const fetchClientData = async () => {
-    console.log('Fetching client data for id:', clientId); // Log the id
-    const response = await fetch(`http://localhost:3001/api/clients/${clientId}`);
-    console.log('Server response:', response); // Log the entire response object
-    if (!response.ok) {
-      console.error('Server response was not ok');
-      return;
-    }
-    const text = await response.text();
-    if (!text) {
-      console.error('Server response was empty');
-      return;
-    }
-    try {
-      const data = JSON.parse(text);
-      setProfileData(data);
-    } catch (error) {
-      console.error('Failed to parse server response:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchClientData();
-  }, [clientId]);
-
   const [projects, setProjects] = useState([]);
   const [consultants, setConsultants] = useState([]);
-
-  const fetchProjectData = async () => {
-    console.log('Fetching project data for client id:', clientId);
-    const response = await fetch(`http://localhost:3001/api/projects/clients/${clientId}`);
-    console.log('Server response:', response);
-    if (!response.ok) {
-      console.error('Server response was not ok');
-      return;
-    }
-    const text = await response.text();
-    if (!text) {
-      console.error('Server response was empty');
-      return;
-    }
-    try {
-      const data = JSON.parse(text);
-      if (Array.isArray(data)) {
-        setProjects(data);
-      } else if (typeof data === 'object' && data !== null) {
-        setProjects([data]);
-      } else {
-        console.error('Unexpected server response:', data);
-      }
-    } catch (error) {
-      console.error('Failed to parse server response:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjectData();
-  }, [clientId]);
-
-  useEffect(() => {
-    fetch('http://localhost:3001/api/consultants')
-    .then(response => {
-      console.log(response);
-      return response;
-    })
-    .then(response => response.json())
-    .then(data => setConsultants(data));
-  }, []);
-
   const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { clientId } = useParams();
+  const navigate = useNavigate();
 
-  const fetchPaymentData = async () => {
-    console.log('Fetching payment data for client id:', clientId);
-    const response = await fetch(`http://localhost:3001/api/payments/clients/${clientId}`);
-    console.log('Server response:', response);
-    if (!response.ok) {
-      console.error('Server response was not ok');
-      return;
-    }
-    const text = await response.text();
-    if (!text) {
-      console.error('Server response was empty');
-      return;
-    }
+  const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
-      const data = JSON.parse(text);
-      if (Array.isArray(data)) {
-        setPayments(data);
-      } else if (typeof data === 'object' && data !== null) {
-        setPayments([data]);
-      } else {
-        console.error('Unexpected server response:', data);
+      const [clientRes, projectsRes, consultantsRes, paymentsRes] = await Promise.all([
+        fetch(`http://localhost:3001/api/clients/${clientId}`),
+        fetch(`http://localhost:3001/api/projects/clients/${clientId}`),
+        fetch('http://localhost:3001/api/consultants'),
+        fetch(`http://localhost:3001/api/payments/clients/${clientId}`)
+      ]);
+
+      if (clientRes.ok) {
+        const clientData = await clientRes.json();
+        setProfileData(clientData || {});
+      }
+      if (projectsRes.ok) {
+        const projectsData = await projectsRes.json();
+        setProjects(Array.isArray(projectsData) ? projectsData : projectsData ? [projectsData] : []);
+      }
+      if (consultantsRes.ok) {
+        const consultantsData = await consultantsRes.json();
+        setConsultants(consultantsData || []);
+      }
+      if (paymentsRes.ok) {
+        const paymentsData = await paymentsRes.json();
+        setPayments(Array.isArray(paymentsData) ? paymentsData : paymentsData ? [paymentsData] : []);
       }
     } catch (error) {
-      console.error('Failed to parse server response:', error);
+      console.error('Failed to fetch data:', error);
     }
-  };
+    setLoading(false);
+  }, [clientId]);
 
   useEffect(() => {
-    fetchPaymentData();
-  }, [clientId]);
+    fetchData();
+  }, [fetchData]);
+
+  const sections = [
+    { id: 'profile', label: 'Profile Info', icon: '👤' },
+    { id: 'status', label: 'Projects', icon: '📋' },
+    { id: 'payments', label: 'Payments', icon: '💳' }
+  ];
+
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'completed': return 'status-completed';
+      case 'processing': return 'status-processing';
+      case 'cancelled': return 'status-cancelled';
+      default: return 'status-default';
+    }
+  };
 
   return (
     <>
-    <h1>Client Profile</h1>
-    <div className="container">
-      <div className="form" style={{ display: 'flex' }}>
-        <div className="sidebar">
-          <h2 onClick={() => setSelectedSection('profile')}>Profile Info</h2>
-          <h2 onClick={() => setSelectedSection('status')}>Project Status</h2>
-          <h2 onClick={() => setSelectedSection('payments')}>Payments</h2>
+      <Header />
+      <div className="profile-page">
+        <div className="profile-header">
+          <div className="container">
+            <button className="back-btn" onClick={() => navigate('/')}>
+              ← Back to Directory
+            </button>
+            <div className="profile-header-content">
+              <div className="profile-avatar">
+                {profileData.name?.charAt(0)?.toUpperCase() || 'C'}
+              </div>
+              <div className="profile-header-info">
+                <h1>{profileData.name || 'Client'}</h1>
+                <p>{profileData.email}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="content">
-          {selectedSection === 'profile' && (
-            <div>
-              <p>Name: {profileData.name}</p>
-              <p>Email: {profileData.email}</p>
-              <p>Phone: {profileData.phone}</p>
-              <p>Home: {profileData.home}</p>
-              <p>City: {profileData.city}</p>
-            </div>
-          )}
-          {selectedSection === 'status' && (
-            <div>
-              {projects.map((project, index) => {
-                const consultant = consultants.find(c => c.id === project.consultant_id);
-                console.log('Consultant:')
-                return (
-                  <div key={index}>
-                    <h2>{project.name}</h2>
-                    {consultant && <p>Consultant: {consultant.name}</p>}
-                    <p>Start Date: {new Date(project.s_date).toLocaleDateString()}</p>
-                    <p>End Date: {new Date(project.e_date).toLocaleDateString()}</p>
-                    <p>Status: {project.status}</p>
-                    <p>Total Cost: {project.tot_cost}</p>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          {selectedSection === 'payments' && (
-            <div>
-              {payments.map((payment, index) => (
-                <div key={index}>
-                  <p>Date: {payment.date}</p>
-                  <p>Amount: {payment.amount}</p>
-                  <p>Method: {payment.method}</p>
-                </div>
+
+        <div className="container">
+          <div className="profile-layout">
+            {/* Sidebar Navigation */}
+            <aside className="profile-sidebar">
+              {sections.map(section => (
+                <button
+                  key={section.id}
+                  className={`sidebar-btn ${selectedSection === section.id ? 'active' : ''}`}
+                  onClick={() => setSelectedSection(section.id)}
+                >
+                  <span className="sidebar-icon">{section.icon}</span>
+                  <span>{section.label}</span>
+                </button>
               ))}
-            </div>
-          )}
+            </aside>
+
+            {/* Content Area */}
+            <main className="profile-content">
+              {loading ? (
+                <div className="loading-state">
+                  <div className="loading-spinner"></div>
+                  <p>Loading...</p>
+                </div>
+              ) : (
+                <>
+                  {selectedSection === 'profile' && (
+                    <div className="content-section">
+                      <h2 className="section-title">Profile Information</h2>
+                      <div className="info-grid">
+                        <div className="info-card">
+                          <span className="info-label">Full Name</span>
+                          <span className="info-value">{profileData.name || 'N/A'}</span>
+                        </div>
+                        <div className="info-card">
+                          <span className="info-label">Email Address</span>
+                          <span className="info-value">{profileData.email || 'N/A'}</span>
+                        </div>
+                        <div className="info-card">
+                          <span className="info-label">Phone Number</span>
+                          <span className="info-value">{profileData.phone || 'N/A'}</span>
+                        </div>
+                        <div className="info-card">
+                          <span className="info-label">Address</span>
+                          <span className="info-value">{profileData.home || 'N/A'}</span>
+                        </div>
+                        <div className="info-card">
+                          <span className="info-label">City</span>
+                          <span className="info-value">{profileData.city || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedSection === 'status' && (
+                    <div className="content-section">
+                      <h2 className="section-title">Your Projects</h2>
+                      {projects.length === 0 ? (
+                        <div className="empty-state">
+                          <span className="empty-icon">📋</span>
+                          <h3>No projects yet</h3>
+                          <p>Start a project with one of our consultants</p>
+                        </div>
+                      ) : (
+                        <div className="projects-list">
+                          {projects.map((project, index) => {
+                            const consultant = consultants.find(c => c.id === project.consultant_id);
+                            return (
+                              <div key={index} className="project-card">
+                                <div className="project-header">
+                                  <h3>{project.name}</h3>
+                                  <span className={`status-badge ${getStatusColor(project.status)}`}>
+                                    {project.status}
+                                  </span>
+                                </div>
+                                {consultant && (
+                                  <p className="project-consultant">
+                                    <span className="meta-icon">👤</span>
+                                    Consultant: {consultant.name}
+                                  </p>
+                                )}
+                                <div className="project-dates">
+                                  <span>📅 {new Date(project.s_date).toLocaleDateString()} - {new Date(project.e_date).toLocaleDateString()}</span>
+                                </div>
+                                <div className="project-cost">
+                                  <span className="cost-label">Total Cost</span>
+                                  <span className="cost-value">${project.tot_cost}</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {selectedSection === 'payments' && (
+                    <div className="content-section">
+                      <h2 className="section-title">Payment History</h2>
+                      {payments.length === 0 ? (
+                        <div className="empty-state">
+                          <span className="empty-icon">💳</span>
+                          <h3>No payments yet</h3>
+                          <p>Your payment history will appear here</p>
+                        </div>
+                      ) : (
+                        <div className="payments-list">
+                          {payments.map((payment, index) => (
+                            <div key={index} className="payment-card">
+                              <div className="payment-info">
+                                <span className="payment-date">{payment.date}</span>
+                                <span className="payment-method">{payment.method}</span>
+                              </div>
+                              <span className="payment-amount">${payment.amount}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </main>
+          </div>
         </div>
       </div>
-    </div>
-  </>
+    </>
   );
 }
 

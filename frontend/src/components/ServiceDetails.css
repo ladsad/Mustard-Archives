@@ -1,89 +1,353 @@
-/* ServiceDetails.css */
-.service-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #fdd99a;
+/* Service Details Page - Yellow Pages Directory Listing */
+
+.service-details-page {
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--yp-cream) 0%, var(--yp-ivory) 100%);
 }
 
-.service-details h1 {
-    color: #a76d18;
-    font-size: 2.5em;
+/* Page Header */
+.page-header {
+    background: linear-gradient(135deg, var(--yp-navy) 0%, #2D4A6F 100%);
+    padding: var(--space-2xl) 0;
+    margin-bottom: var(--space-xl);
 }
 
-.consultants {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    grid-gap: 20px;
-    width: 100%;
-    margin-top: 20px;
+.page-header .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
 }
 
-.consultant {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    width: 300px;
-    background-color: #feedcf;
-    border-radius: 10px;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+.back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--space-lg);
 }
 
-.consultant h2 {
-    color: #a76d18;
-    font-size: 1.5em;
-    margin-bottom: 10px;
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--yp-white);
 }
 
-.consultant p {
-    color: #666;
-    font-size: 1em;
-    text-align: center;
+.page-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--yp-gold);
+    margin-bottom: var(--space-sm);
 }
 
-.service-details input[type="range"] {
-    width: 50%;
-    height: 10px;
-    border-radius: 5px;
-    background: #feedcf;
-    outline: none;
-    padding: 0;
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
     margin: 0;
 }
 
-.service-details input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #a76d18;
+/* Content Layout */
+.service-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-xl);
+    padding-bottom: var(--space-3xl);
+}
+
+/* Filters Sidebar */
+.filters-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.filter-card {
+    background: var(--yp-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.filter-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--yp-navy);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 2px solid var(--yp-cream);
+}
+
+.filter-icon {
+    font-size: 1.25rem;
+}
+
+.filter-group {
+    margin-bottom: var(--space-lg);
+}
+
+.filter-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--yp-dark-gray);
+    margin-bottom: var(--space-sm);
+}
+
+.rate-value {
+    color: var(--yp-mustard);
+    font-weight: 700;
+}
+
+.filter-select {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--yp-cream);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    background: var(--yp-white);
     cursor: pointer;
 }
 
-.service-details input[type="range"]::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #a76d18;
-    cursor: pointer;
-}
-
-.service-details select {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #a76d18; 
-    background-color: #feedcf; 
-    color: #a76d18; 
-    font-size: 1em; 
+.filter-select:focus {
+    border-color: var(--yp-mustard);
     outline: none;
 }
 
-.service-details select option {
-    background-color: #feedcf;
-    color: #a76d18;
+.filter-range {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--yp-cream);
+    appearance: none;
+    cursor: pointer;
+}
+
+.filter-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--yp-gold) 0%, var(--yp-mustard) 100%);
+    border: 3px solid var(--yp-white);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--yp-gray);
+    margin-top: var(--space-xs);
+}
+
+.filter-reset {
+    width: 100%;
+    margin-top: var(--space-md);
+}
+
+.results-count {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--yp-cream);
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--yp-gray);
+}
+
+.results-count strong {
+    color: var(--yp-navy);
+}
+
+/* Consultants List */
+.consultants-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Consultant Card */
+.consultant-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    background: var(--yp-white);
+    border: 2px solid transparent;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    animation: fadeIn 0.4s ease forwards;
+    opacity: 0;
+}
+
+.consultant-card:hover {
+    border-color: var(--yp-mustard);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(4px);
+}
+
+.consultant-avatar {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--yp-navy) 0%, #2D4A6F 100%);
+    color: var(--yp-gold);
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    flex-shrink: 0;
+}
+
+.consultant-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.consultant-name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--yp-navy);
+    margin-bottom: var(--space-xs);
+}
+
+.consultant-meta {
+    display: flex;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-sm);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.9rem;
+    color: var(--yp-gray);
+}
+
+.meta-icon {
+    font-size: 1rem;
+}
+
+.consultant-contact {
+    display: flex;
+    gap: var(--space-lg);
+    font-size: 0.85rem;
+    color: var(--yp-light-gray);
+}
+
+.consultant-rate {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.rate-amount {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--yp-mustard);
+}
+
+.rate-label {
+    font-size: 0.8rem;
+    color: var(--yp-gray);
+}
+
+.consultant-action {
+    flex-shrink: 0;
+}
+
+.action-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--yp-cream);
+    border-radius: 50%;
+    font-size: 1.25rem;
+    color: var(--yp-mustard);
+    transition: all var(--transition-fast);
+}
+
+.consultant-card:hover .action-arrow {
+    background: var(--yp-mustard);
+    color: var(--yp-white);
+}
+
+/* Loading & Empty States */
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: var(--space-3xl);
+    background: var(--yp-white);
+    border-radius: var(--radius-lg);
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--yp-cream);
+    border-top-color: var(--yp-mustard);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--space-md);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .service-content {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-sidebar {
+        position: static;
+    }
+
+    .consultant-card {
+        flex-wrap: wrap;
+    }
+
+    .consultant-rate {
+        text-align: left;
+    }
+}
+
+@media (max-width: 600px) {
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .consultant-card {
+        padding: var(--space-md);
+    }
+
+    .consultant-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .consultant-contact {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
 }
