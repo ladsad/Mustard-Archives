@@ -1,0 +1,352 @@
+/* Analytics Dashboard - Dark Mode Styling */
+
+.analytics-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+  color: #e6edf3;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 24px;
+}
+
+/* Loading State */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #30363d;
+  border-top-color: #58a6ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Header */
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.dashboard-header .subtitle {
+  color: #8b949e;
+  font-size: 1rem;
+}
+
+/* Navigation Tabs */
+.dashboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  background: #21262d;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background: #30363d;
+  border-color: #58a6ff;
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+  border-color: #238636;
+  color: #ffffff;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Overview Grid */
+.overview-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.overview-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+/* Card Styling */
+.analytics-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.analytics-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.analytics-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #e6edf3;
+}
+
+.analytics-card h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #8b949e;
+  margin-bottom: 12px;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #58a6ff;
+  margin-bottom: 4px;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-card.highlight {
+  border-color: #238636;
+  background: linear-gradient(135deg, #0d1117 0%, #0d2818 100%);
+}
+
+.metric-card.highlight .metric-value {
+  color: #3fb950;
+}
+
+/* Funnel Chart */
+.funnel-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.funnel-stage {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.funnel-bar-container {
+  flex: 1;
+  height: 48px;
+  background: #21262d;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.funnel-bar {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 16px;
+  font-weight: 600;
+  transition: width 0.8s ease;
+}
+
+.funnel-bar.stage-page_view {
+  background: linear-gradient(90deg, #58a6ff 0%, #388bfd 100%);
+}
+
+.funnel-bar.stage-click {
+  background: linear-gradient(90deg, #a371f7 0%, #8957e5 100%);
+}
+
+.funnel-bar.stage-add_to_cart {
+  background: linear-gradient(90deg, #f0883e 0%, #d29922 100%);
+}
+
+.funnel-bar.stage-purchase {
+  background: linear-gradient(90deg, #3fb950 0%, #238636 100%);
+}
+
+.funnel-label {
+  width: 120px;
+  font-size: 0.9rem;
+  color: #c9d1d9;
+  text-transform: capitalize;
+}
+
+.funnel-percentage {
+  font-size: 0.85rem;
+  color: #8b949e;
+  width: 60px;
+  text-align: right;
+}
+
+/* Cohort Heatmap */
+.cohort-heatmap {
+  overflow-x: auto;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(12, 1fr);
+  gap: 4px;
+  min-width: 600px;
+}
+
+.heatmap-cell {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.heatmap-header {
+  background: #21262d;
+  color: #8b949e;
+}
+
+.heatmap-label {
+  background: #21262d;
+  color: #c9d1d9;
+}
+
+.heatmap-value {
+  transition: transform 0.2s ease;
+}
+
+.heatmap-value:hover {
+  transform: scale(1.05);
+}
+
+/* Benchmark Chart */
+.benchmark-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.benchmark-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr 80px;
+  gap: 16px;
+  align-items: center;
+}
+
+.benchmark-label {
+  font-size: 0.9rem;
+  color: #c9d1d9;
+}
+
+.benchmark-bar {
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: width 0.8s ease;
+}
+
+.benchmark-bar.pandas {
+  background: linear-gradient(90deg, #f85149 0%, #da3633 100%);
+}
+
+.benchmark-bar.spark {
+  background: linear-gradient(90deg, #3fb950 0%, #238636 100%);
+}
+
+.speedup-badge {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* Footer */
+.dashboard-footer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #30363d;
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .analytics-dashboard {
+    padding: 16px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .overview-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .benchmark-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
